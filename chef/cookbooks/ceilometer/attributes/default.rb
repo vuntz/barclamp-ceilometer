@@ -45,3 +45,8 @@ default[:ceilometer][:ha][:server][:enabled] = false
 default[:ceilometer][:ha][:central][:enabled] = false
 # Ports to bind to when haproxy is used for the real ports
 default[:ceilometer][:ha][:ports][:api] = 5560
+
+default[:ceilometer][:ha][:central][:agent] = "lsb:openstack-ceilometer-agent-central"
+# use OCF agent once it is able to use LSB services internally
+#default[:ceilometer][:ha][:central][:agent] = "ocf:openstack:ceilometer-agent-central"
+default[:ceilometer][:ha][:central][:op][:monitor][:interval] = "10s"
