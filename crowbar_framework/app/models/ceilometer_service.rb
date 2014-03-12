@@ -34,7 +34,8 @@ class CeilometerService < PacemakerServiceObject
         },
         "ceilometer-cagent" => {
           "unique" => false,
-          "count" => 1
+          "count" => 1,
+          "cluster" => true
         },
         "ceilometer-server" => {
           "unique" => false,
@@ -140,7 +141,7 @@ class CeilometerService < PacemakerServiceObject
     # the VIP of the cluster to be setup
     allocate_virtual_ips_for_any_cluster_in_networks(server_elements, vip_networks)
 
-    central_elements, central_nodes, central_ha_enabled = role_expand_elements(role, "ceilometer-central")
+    central_elements, central_nodes, central_ha_enabled = role_expand_elements(role, "ceilometer-cagent")
 
     role.save if prepare_role_for_ha(role, ["ceilometer", "ha", "central", "enabled"], central_ha_enabled)
 

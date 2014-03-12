@@ -50,18 +50,13 @@ end
 
 include_recipe "#{@cookbook_name}::common"
 
-ha_enabled      = node[:ceilometer][:ha][:central][:enabled]
+ha_enabled = node[:ceilometer][:ha][:central][:enabled]
 
-include_recipe "ceilometer::central_ha"
-
-service "ceilometer-agent-central" do
-  if %w(suse).include?(node.platform)
-    service_name "openstack-ceilometer-agent-central"
-  elsif %w(redhat centos).include?(node.platform)
-    service_name "openstack-ceilometer-central"
-  end
+service default[:ceilometer][:agent_central][:service_name] do
   supports :status => true, :restart => true, :start => true, :stop => true
-  action ha_enabled ? [ :disable , :stop ] : [ :enable, :start ]
+  action ha_enabled ? :disable : [ :enable, :start ]
   subscribes :restart, resources("template[/etc/ceilometer/ceilometer.conf]")
   subscribes :restart, resources("template[/etc/ceilometer/pipeline.yaml]")
 end
+
+include_recipe "ceilometer::central_ha"
