@@ -27,16 +27,10 @@ if node[:ceilometer][:ha][:central][:enabled]
     #  "user"    => node[:ceilometer][:user],
     #  "binary"  => "/usr/bin/ceilometer-agent-central",
     #  "use_service"    => true,
-    #  "service" => "openstack-ceilometer-agent-central"
+    #  "service" => node[:ceilometer][:agent_central][:service_name]
     #})
     action [ :create, :start ]
     retries 1
     retry_delay 5
   end
-
-  # adapt standard service commands to force chef use crm API
-  resource = resources(:service => default[:ceilometer][:agent_central][:service_name])
-  resource.start_command("crm resource start #{service_name}")
-  resource.restart_command("crm resource restart #{service_name}")
-  resource.stop_command("crm resource stop #{service_name}")
 end

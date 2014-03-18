@@ -52,11 +52,12 @@ include_recipe "#{@cookbook_name}::common"
 
 ha_enabled = node[:ceilometer][:ha][:central][:enabled]
 
-service default[:ceilometer][:agent_central][:service_name] do
+service node[:ceilometer][:agent_central][:service_name] do
   supports :status => true, :restart => true, :start => true, :stop => true
-  action ha_enabled ? :disable : [ :enable, :start ]
+  action [ :enable, :start ]
   subscribes :restart, resources("template[/etc/ceilometer/ceilometer.conf]")
   subscribes :restart, resources("template[/etc/ceilometer/pipeline.yaml]")
+  provider Chef::Provider::CrowbarPacemakerService if ha_enabled
 end
 
 include_recipe "ceilometer::central_ha"
