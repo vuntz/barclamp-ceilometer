@@ -52,7 +52,7 @@ include_recipe "#{@cookbook_name}::common"
 
 ha_enabled = node[:ceilometer][:ha][:central][:enabled]
 
-service "ceilometer-agent-central-service" do
+service "ceilometer-agent-central" do
   service_name node[:ceilometer][:agent_central][:service_name]
   supports :status => true, :restart => true, :start => true, :stop => true
   action [ :enable, :start ]
