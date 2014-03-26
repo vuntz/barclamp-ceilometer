@@ -192,10 +192,7 @@ service "ceilometer-collector" do
   subscribes :restart, resources("template[/etc/ceilometer/pipeline.yaml]")
 end
 
-api_service_name = "ceilometer-api-service"
-api_service_name = "clone-#{api_service_name}" if ha_enabled
-
-service api_service_name do
+service "ceilometer-api" do
   service_name node[:ceilometer][:api][:service_name]
   supports :status => true, :restart => true, :start => true, :stop => true
   action [ :enable, :start ]
