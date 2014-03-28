@@ -26,12 +26,12 @@ service_name = "ceilometer-api-service"
 pacemaker_primitive service_name do
   agent node[:ceilometer][:ha][:api][:agent]
   op    node[:ceilometer][:ha][:api][:op]
-  action [ :create, :start ]
+  action :create
   retries 1
   retry_delay 5
 end
 
 pacemaker_clone "clone-#{service_name}" do
   rsc service_name
-  action :create
+  action [ :create, :start ]
 end
